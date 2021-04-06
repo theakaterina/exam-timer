@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 /*Timer has minutes as input */
 const Timer = (props) => {
   /*Start by converting minutes to seconds */
   const [seconds, setSeconds] = useState(Number(props.minutes) * 60);
+  const [isActive, setIsActive] = useState(true);
+  const [intervalId, setIntervalId] = useState();
+  const history = useHistory();
 
   /*Using total seconds, find the hours, minutes and seconds left */
   const calculateTime = (totalSeconds) => {
@@ -18,7 +21,6 @@ const Timer = (props) => {
   };
 
   /*Pause button */
-  const [isActive, setIsActive] = useState(false);
   function toggle() {
     setIsActive(!isActive);
   }
@@ -29,28 +31,32 @@ const Timer = (props) => {
   }
 
   /*Back button */
-  const history = useHistory();
   function back() {
-    history.goBack();
+    history.push("/");
   }
-
-  /*setInterval lets you call a function every n milliseconds */
-  /*Every time you setInterval, it autoincrements the intervalID */
-  const [intervalId, setIntervalId] = useState();
 
   useEffect(() => {
     if (!isActive && intervalId) {
-      clearInterval(intervalId);
+      clearTimeout(intervalId);
     } else if (isActive) {
       setIntervalId(
-        setInterval(() => {
-          setSeconds((seconds) => seconds - 1);
+        setTimeout(() => {
+          setSeconds((s) => s - 1);
         }, 1000)
       );
     }
 
-    return () => clearInterval(intervalId);
-  }, [isActive]);
+    return () => clearTimeout(intervalId);
+  }, [isActive, seconds]);
+
+  useEffect(() => {
+    console.log("useffect", seconds);
+    if (seconds <= 0) {
+      console.log("Done timer!");
+      setIsActive(false);
+      history.push("/exam");
+    }
+  }, [seconds]);
 
   return (
     <div>

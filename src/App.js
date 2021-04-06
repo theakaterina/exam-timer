@@ -5,11 +5,16 @@ import InputForm from "./InputForm";
 import Timer from "./Timer";
 
 function App() {
-  const [examDetails, setExamDetails] = useState({ reading: "none", exam: 0 });
+  const [examDetails, setExamDetails] = useState({
+    reading: "none",
+    exam: 0,
+    perusal: 0,
+  });
   const history = useHistory();
 
   const onInputFormSubmit = (e) => {
-    setExamDetails(e);
+    setExamDetails({ ...e });
+    console.log({ ...e });
     if (e.reading === "none") {
       history.push("/exam");
     } else {
@@ -25,6 +30,7 @@ function App() {
         </Route>
         <Route path="/perusal">
           <Timer
+            key={1}
             title={examDetails.reading + " Time Left"}
             minutes={examDetails.perusal}
             message={examDetails.message}
@@ -32,6 +38,7 @@ function App() {
         </Route>
         <Route path="/exam">
           <Timer
+            key={2}
             title="Exam Time Left"
             minutes={examDetails.exam}
             message={examDetails.message}
