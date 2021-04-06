@@ -1,30 +1,43 @@
 import "./App.css";
 import { useState } from "react";
-
+import { Route, Switch, useHistory } from "react-router";
 import InputForm from "./InputForm";
-import TimerScreen from "./TimerScreen";
+import Timer from "./Timer";
 
 function App() {
-  const [screen, setScreen] = useState("input");
-  const [examDetails, setExamDetails] = useState();
+  const [examDetails, setExamDetails] = useState({ reading: "none", exam: 0 });
+  const history = useHistory();
+
   const onInputFormSubmit = (e) => {
     setExamDetails(e);
-    if (e.perusal === 0) {
-      setScreen("exam");
+    if (e.reading === "none") {
+      history.push("/exam");
     } else {
-      setScreen("perusal");
+      history.push("/perusal");
     }
   };
 
   return (
     <div>
-      {screen === "input" && <InputForm onSubmit={onInputFormSubmit} />}
-      {screen === "perusal" && (
-        <TimerScreen title="Perusal Time Left" minutes={examDetails.perusal} />
-      )}
-      {screen === "exam" && (
-        <TimerScreen title="Exam Time Left" minutes={examDetails.exam} />
-      )}
+      <Switch>
+        <Route exact path="/">
+          <InputForm onSubmit={onInputFormSubmit} />
+        </Route>
+        <Route path="/perusal">
+          <Timer
+            title={examDetails.reading + " Time Left"}
+            minutes={examDetails.perusal}
+            message={examDetails.message}
+          />
+        </Route>
+        <Route path="/exam">
+          <Timer
+            title="Exam Time Left"
+            minutes={examDetails.exam}
+            message={examDetails.message}
+          />
+        </Route>
+      </Switch>
     </div>
   );
 }

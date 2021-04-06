@@ -17,7 +17,6 @@ const TimeInput = (props) => {
         value={value}
         placeholder="0"
       />
-      m
     </div>
   );
 };
