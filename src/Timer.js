@@ -1,40 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
 
-/*Timer has minutes as input */
+/**
+ * Create a new timer with hours, minutes and seconds and a custom message
+ * Listens for pause/start and reset
+ * @param {string} props.minutes
+ * @param {string} props.message
+ * @returns time left + message
+ */
+
+/*Timer has minutes as input*/
 const Timer = (props) => {
   /*Start by converting minutes to seconds */
-  const [seconds, setSeconds] = useState(Number(props.minutes) * 60);
+  const [globalSeconds, setSeconds] = useState(Number(props.minutes) * 60);
   const [isActive, setIsActive] = useState(true);
   const [intervalId, setIntervalId] = useState();
-  const history = useHistory();
 
-  /*Using total seconds, find the hours, minutes and seconds left */
-  const calculateTime = (totalSeconds) => {
-    const totalMinutes = Math.floor(totalSeconds / 60);
+  /*Using total seconds, find the hours, minutes and seconds left*/
+  const calculateTime = (seconds) => {
+    const totalMinutes = Math.floor(seconds / 60);
     const hours = String(Math.floor(totalMinutes / 60));
     const minutes = String(totalMinutes % 60).padStart(2, "0");
-    const secondsLeft = String(totalSeconds % 60).padStart(2, "0");
+    const localSeconds = String(seconds % 60).padStart(2, "0");
 
-    const time = `${hours}h ${minutes}m ${secondsLeft}s`;
+    const time = `${hours}:${minutes}:${localSeconds}`;
     return time;
   };
 
-  /*Pause button */
+  /*Pause timer*/
   function toggle() {
     setIsActive(!isActive);
   }
 
-  /*Restart button */
+  /*Restart timer*/
   function restart() {
     setSeconds(Number(props.minutes) * 60);
   }
 
-  /*Back button */
-  function back() {
-    history.push("/");
-  }
-
+  /*While active, every second, decrease the number of seconds by 1*/
   useEffect(() => {
     if (!isActive && intervalId) {
       clearTimeout(intervalId);
@@ -45,28 +47,34 @@ const Timer = (props) => {
         }, 1000)
       );
     }
-
     return () => clearTimeout(intervalId);
   }, [isActive, seconds]);
 
+  /*Listen for the pause/start button*/
   useEffect(() => {
-    console.log("useffect", seconds);
-    if (seconds <= 0) {
-      console.log("Done timer!");
-      setIsActive(false);
-      history.push("/exam");
-    }
-  }, [seconds]);
+    window.addEventListener("toggleTimer", toggle);
+    return () => window.removeEventListener("toggleTimer", toggle);
+  }, []);
+
+  /*Listen for the restart button*/
+  useEffect(() => {
+    window.addEventListener("restartTimer", restart);
+    return () => window.removeEventListener("restartTimer", restart);
+  }, []);
+
+  let time = calculateTime(globalSeconds).split(":");
 
   return (
     <div>
-      <h1>{props.title}</h1>
-      <div className="time">{calculateTime(seconds)}</div>
-      <button onClick={toggle}>{isActive ? "Pause" : "Start"}</button>
-      <button onClick={restart}>Restart</button>
-      <button onClick={back}>Back</button>
-      <button>Full Screen</button>
-      <p>{props.message}</p>
+      <div class="countdown">
+        {time[0]}
+        <div class="unit">h</div>
+        {time[1]}
+        <div class="unit">m</div>
+        {time[2]}
+        <div class="unit">s</div>
+      </div>
+      <p class="message">{props.message}</p>
     </div>
   );
 };
