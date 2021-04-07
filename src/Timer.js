@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 /**
- * Create a new timer with hours, minutes and seconds and a custom message
+ * Create a new timer with hours, minutes and seconds
  * Listens for pause/start and reset
  * @param {string} props.minutes
- * @param {string} props.message
- * @returns time left + message
+ * @returns time left
  */
 
 /*Timer has minutes as input*/
@@ -22,8 +21,7 @@ const Timer = (props) => {
     const minutes = String(totalMinutes % 60).padStart(2, "0");
     const localSeconds = String(seconds % 60).padStart(2, "0");
 
-    const time = `${hours}:${minutes}:${localSeconds}`;
-    return time;
+    return [hours, minutes, localSeconds];
   };
 
   /*Pause timer*/
@@ -50,31 +48,35 @@ const Timer = (props) => {
     return () => clearTimeout(intervalId);
   }, [isActive, globalSeconds]);
 
-  /*Listen for the pause/start button*/
+  /*Listen for the pause/start and restart buttons*/
   useEffect(() => {
     window.addEventListener("toggleTimer", toggle);
-    return () => window.removeEventListener("toggleTimer", toggle);
-  }, []);
-
-  /*Listen for the restart button*/
-  useEffect(() => {
     window.addEventListener("restartTimer", restart);
-    return () => window.removeEventListener("restartTimer", restart);
+    return () => {
+      window.removeEventListener("toggleTimer", toggle);
+      window.removeEventListener("restartTimer", restart);
+    };
   }, []);
 
-  let time = calculateTime(globalSeconds).split(":");
+  /*Once the timer reaches 0, turn off*/
+  useEffect(() => {
+    if (globalSeconds <= 0) {
+      setIsActive(false);
+      /*Have to wait until setIsActive has actually run*/
+      props.onEnd && setTimeout(props.onEnd, 1);
+    }
+  }, [globalSeconds]);
+
+  const time = calculateTime(globalSeconds);
 
   return (
-    <div>
-      <div class="countdown">
-        {time[0]}
-        <div class="unit">h</div>
-        {time[1]}
-        <div class="unit">m</div>
-        {time[2]}
-        <div class="unit">s</div>
-      </div>
-      <p class="message">{props.message}</p>
+    <div className="timer">
+      {time[0]}
+      <span className="unit">h</span>
+      {time[1]}
+      <span className="unit">m</span>
+      {time[2]}
+      <span className="unit">s</span>
     </div>
   );
 };
