@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Timer from "./Timer";
+import { useHistory } from "react-router-dom";
 
 /**
  * A timerscreen contains one - many timers, and a global pause/start, reset and back button

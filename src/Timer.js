@@ -48,7 +48,7 @@ const Timer = (props) => {
       );
     }
     return () => clearTimeout(intervalId);
-  }, [isActive, seconds]);
+  }, [isActive, globalSeconds]);
 
   /*Listen for the pause/start button*/
   useEffect(() => {
