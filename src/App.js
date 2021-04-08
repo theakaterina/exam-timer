@@ -3,19 +3,21 @@ import { useState } from "react";
 import { Route, Switch, useHistory } from "react-router";
 import TimerForm from "./TimerForm";
 import TimerScreen from "./TimerScreen";
-import Timer from "./Timer";
 
+/**
+ * Main app contains two routes, the input screen and the timers
+ *
+ */
 function App() {
   const history = useHistory();
   const [timers, setTimers] = useState([]);
 
   const onTimerFormSubmit = (e) => {
-    console.log(e);
     setTimers(e);
     history.push("/examstart");
   };
-  /*Pause/start button*/
 
+  /*Pause/start button*/
   function toggle() {
     window.dispatchEvent(new CustomEvent("toggleTimer"));
   }
@@ -40,9 +42,9 @@ function App() {
           {timers.map((timer, index) => (
             <TimerScreen key={index} {...timer} />
           ))}
-          <button>pause</button>
-          <button>restart</button>
-          <button>go back</button>
+          <button onClick={toggle}>pause</button>
+          <button onClick={restart}>restart</button>
+          <button onClick={goBack}>go back</button>
         </Route>
       </Switch>
     </div>

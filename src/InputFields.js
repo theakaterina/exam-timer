@@ -4,16 +4,12 @@ import React, { useEffect, useState } from "react";
  * Create the input fields for perusal/planning, exam and a message
  * Goes inside the TimerForm
  * @param {*} props
- * @returns
  */
-const TimerInput = (props) => {
-  /*Time defaults to 0 for both perusal/planning and exam*/
-  /*This is called a State Hook in React*/
+
+const InputFields = (props) => {
   const [perusalInput, setPerusalInput] = useState(props.perusal);
   const [examInput, setExamInput] = useState(props.exam);
   const [readingType, setReadingType] = useState(props.readingType);
-
-  /*Message defaults to an empty string*/
   const [messageInput, setMessageInput] = useState(props.message);
 
   const getFormData = () => ({
@@ -25,17 +21,14 @@ const TimerInput = (props) => {
 
   const onPerusalChange = (e) => {
     setPerusalInput(e.target.value);
-    // props.onChange(getFormData());
   };
 
   const onExamChange = (e) => {
     setExamInput(e.target.value);
-    // props.onChange(getFormData());
   };
 
   const onReadingTypeChange = (e) => {
     setReadingType(e.target.value);
-    // props.onChange(getFormData());
   };
 
   const onMessageChange = (e) => {
@@ -49,8 +42,8 @@ const TimerInput = (props) => {
   return (
     <div>
       <select value={readingType} onChange={onReadingTypeChange}>
-        <option value="Perusal">Perusal Time: </option>
-        <option value="Planning">Planning Time: </option>
+        <option value="perusal">Perusal Time: </option>
+        <option value="planning">Planning Time: </option>
         <option value="none">None</option>
       </select>
       {readingType !== "none" && (
@@ -85,4 +78,4 @@ const TimerInput = (props) => {
   );
 };
 
-export default TimerInput;
+export default InputFields;

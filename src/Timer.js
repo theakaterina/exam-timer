@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
  * Create a new timer with hours, minutes and seconds
  * Listens for pause/start and reset
  * @param {string} props.minutes
- * @returns time left
  */
 
 /*Timer has minutes as input*/
@@ -26,11 +25,12 @@ const Timer = (props) => {
 
   /*Pause timer*/
   function toggle() {
-    setIsActive(!isActive);
+    setIsActive((f) => !f);
   }
 
   /*Restart timer*/
   function restart() {
+    setIsActive(false);
     setSeconds(Number(props.minutes) * 60);
   }
 

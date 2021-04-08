@@ -1,23 +1,21 @@
 import React, { useState } from "react";
-import TimerInput from "./TimerInput";
+import InputFields from "./InputFields";
 
-/*Form for inputting perusal time, exam time and an optional message*/
-const InputForm = (props) => {
+/** Form for adding a timer - can add multiple timers by adding more InputFields
+ * @param {*} props
+ */
+const TimerForm = (props) => {
   const [formData, setFormData] = useState([
     {
-      perusal: 0,
-      exam: 0,
       message: "",
       readingType: "perusal",
     },
   ]);
 
-  const addForm = () => {
+  const addFields = () => {
     setFormData([
       ...formData,
       {
-        perusal: 0,
-        exam: 0,
         message: "",
         readingType: "perusal",
       },
@@ -31,21 +29,23 @@ const InputForm = (props) => {
   };
 
   const onSubmit = () => {
-    console.log("submit", formData);
     props.onSubmit(formData);
   };
 
   return (
     <div>
       {formData.map((form, index) => (
-        <TimerInput
-          onChange={(data) => onFormChange(index, data)}
-          key={index}
-          {...form}
-        />
+        <div>
+          <h3>Exam {index + 1}</h3>
+          <InputFields
+            onChange={(data) => onFormChange(index, data)}
+            key={index}
+            {...form}
+          />
+        </div>
       ))}
 
-      <button onClick={addForm}>Add exam</button>
+      <button onClick={addFields}>Add another exam</button>
       <button type="submit" onClick={onSubmit}>
         START
       </button>
@@ -53,4 +53,4 @@ const InputForm = (props) => {
   );
 };
 
-export default InputForm;
+export default TimerForm;

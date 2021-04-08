@@ -2,31 +2,44 @@ import React, { useState } from "react";
 import Timer from "./Timer";
 
 /**
- * A timerscreen contains one - many timers, and a global pause/start, reset and back button
+ * A timerscreen contains a title, timer and a message
+ * @param {string} props.readingType
+ * @param {Number} props.perusal
+ * @param {Number} props.exam
+ * @param {string} props.message
  */
 
 const TimerScreen = (props) => {
-  /*Timers is a list of dictionaries containing all of the details for each timer*/
+  /*The timer mode can either be perusal or exam*/
   const [mode, setMode] = useState(
     props.readingType !== "none" ? "perusal" : "exam"
   );
 
-  const title = "title";
+  /*Set the title*/
+  let title = "";
+  if (mode === "perusal") {
+    if (props.readingType === "perusal") {
+      title = "Perusal Time Left";
+    } else {
+      title = "Planning Time Left";
+    }
+  } else {
+    title = "Exam Time Left";
+  }
 
+  /*Go straight from perusal/planning time to the exam timer*/
   const onPerusalEnd = () => {
     setMode("exam");
   };
 
   return (
     <div>
-      <div className="title">
-        {props.readingType} {mode}
-      </div>
+      <h1 className="title">{title}</h1>
       {mode === "perusal" && (
         <Timer key={1} onEnd={onPerusalEnd} minutes={props.perusal} />
       )}
       {mode === "exam" && <Timer key={2} minutes={props.exam} />}
-      <div className="message">{props.message}</div>
+      <h2 className="message">{props.message}</h2>
     </div>
   );
 };
