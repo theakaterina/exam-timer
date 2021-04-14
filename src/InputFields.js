@@ -7,13 +7,13 @@ import React, { useEffect, useState } from "react";
  */
 
 const InputFields = (props) => {
-  const [perusalInput, setPerusalInput] = useState(props.perusal);
-  const [examInput, setExamInput] = useState(props.exam);
-  const [readingType, setReadingType] = useState(props.readingType);
-  const [messageInput, setMessageInput] = useState(props.message);
+  const [perusalInput, setPerusalInput] = useState(props.perusal || "");
+  const [examInput, setExamInput] = useState(props.exam || "");
+  const [readingType, setReadingType] = useState(props.readingType || "none");
+  const [messageInput, setMessageInput] = useState(props.message || "");
 
   const getFormData = () => ({
-    readingType: Number(perusalInput) === 0 ? "none" : readingType,
+    readingType: readingType,
     perusal: Number(perusalInput),
     exam: Number(examInput),
     message: messageInput,

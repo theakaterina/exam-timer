@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 /**
  * Create a new timer with hours, minutes and seconds
@@ -12,6 +12,7 @@ const Timer = (props) => {
   const [globalSeconds, setSeconds] = useState(Number(props.minutes) * 60);
   const [isActive, setIsActive] = useState(true);
   const [intervalId, setIntervalId] = useState();
+  const isMounted = useRef(true);
 
   /*Using total seconds, find the hours, minutes and seconds left*/
   const calculateTime = (seconds) => {
@@ -36,16 +37,22 @@ const Timer = (props) => {
 
   /*While active, every second, decrease the number of seconds by 1*/
   useEffect(() => {
+    isMounted.current = true;
     if (!isActive && intervalId) {
       clearTimeout(intervalId);
     } else if (isActive) {
       setIntervalId(
         setTimeout(() => {
-          setSeconds((s) => s - 1);
+          if (isMounted.current) {
+            setSeconds((s) => s - 1);
+          }
         }, 1000)
       );
     }
-    return () => clearTimeout(intervalId);
+    return () => {
+      clearTimeout(intervalId);
+      isMounted.current = false;
+    };
   }, [isActive, globalSeconds]);
 
   /*Listen for the pause/start and restart buttons*/
@@ -62,8 +69,7 @@ const Timer = (props) => {
   useEffect(() => {
     if (globalSeconds <= 0) {
       setIsActive(false);
-      /*Have to wait until setIsActive has actually run*/
-      props.onEnd && setTimeout(props.onEnd, 1);
+      props.onEnd();
     }
   }, [globalSeconds]);
 

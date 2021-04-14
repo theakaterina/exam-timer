@@ -35,11 +35,10 @@ const TimerForm = (props) => {
   return (
     <div>
       {formData.map((form, index) => (
-        <div>
+        <div key={index}>
           <h3>Exam {index + 1}</h3>
           <InputFields
             onChange={(data) => onFormChange(index, data)}
-            key={index}
             {...form}
           />
         </div>
