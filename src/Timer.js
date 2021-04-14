@@ -18,9 +18,14 @@ const Timer = (props) => {
   const calculateTime = (seconds) => {
     const totalMinutes = Math.floor(seconds / 60);
     const hours = String(Math.floor(totalMinutes / 60));
-    const minutes = String(totalMinutes % 60).padStart(2, "0");
-    const localSeconds = String(seconds % 60).padStart(2, "0");
-
+    const minutes =
+      hours === "0"
+        ? String(totalMinutes % 60)
+        : String(totalMinutes % 60).padStart(2, "0");
+    const localSeconds =
+      seconds < 60
+        ? String(seconds % 60)
+        : String(seconds % 60).padStart(2, "0");
     return [hours, minutes, localSeconds];
   };
 
@@ -37,6 +42,7 @@ const Timer = (props) => {
 
   /*While active, every second, decrease the number of seconds by 1*/
   useEffect(() => {
+    /*isMounted is necessary to stop memory leaks when the first timer hits 0*/
     isMounted.current = true;
     if (!isActive && intervalId) {
       clearTimeout(intervalId);
@@ -75,12 +81,15 @@ const Timer = (props) => {
 
   const time = calculateTime(globalSeconds);
 
+  /*Only display the hours and minutes if there are hours and minutes left*/
   return (
     <div className="timer">
-      {time[0]}
-      <span className="unit">h</span>
-      {time[1]}
-      <span className="unit">m</span>
+      {time[0] === "0" ? "" : time[0]}
+      <span className="unit">{time[0] === "0" ? "" : "h "}</span>
+      {time[0] === "0" && time[1] == "0" ? "" : time[1]}
+      <span className="unit">
+        {time[0] === "0" && time[1] == "0" ? "" : "m "}
+      </span>
       {time[2]}
       <span className="unit">s</span>
     </div>
