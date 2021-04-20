@@ -35,7 +35,7 @@ const Timer = (props) => {
   }
 
   /*Restart timer*/
-  function restart() {
+  function reset() {
     setIsActive(false);
     setSeconds(Number(props.minutes) * 60);
   }
@@ -64,10 +64,10 @@ const Timer = (props) => {
   /*Listen for the pause/start and restart buttons*/
   useEffect(() => {
     window.addEventListener("toggleTimer", toggle);
-    window.addEventListener("restartTimer", restart);
+    window.addEventListener("resetTimer", reset);
     return () => {
       window.removeEventListener("toggleTimer", toggle);
-      window.removeEventListener("restartTimer", restart);
+      window.removeEventListener("resetTimer", reset);
     };
   }, []);
 
@@ -86,9 +86,9 @@ const Timer = (props) => {
     <div className="timer">
       {time[0] === "0" ? "" : time[0]}
       <span className="unit">{time[0] === "0" ? "" : "h "}</span>
-      {time[0] === "0" && time[1] == "0" ? "" : time[1]}
+      {time[0] === "0" && time[1] === "0" ? "" : time[1]}
       <span className="unit">
-        {time[0] === "0" && time[1] == "0" ? "" : "m "}
+        {time[0] === "0" && time[1] === "0" ? "" : "m "}
       </span>
       {time[2]}
       <span className="unit">s</span>

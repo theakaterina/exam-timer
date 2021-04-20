@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import InputFields from "./InputFields";
 
-/** Form for adding a timer - can add multiple timers by adding more InputFields
+/** Form for adding a timer - can add multiple timers (max 4) by adding more InputFields
  * @param {*} props
  */
 const TimerForm = (props) => {
@@ -43,11 +43,12 @@ const TimerForm = (props) => {
           />
         </div>
       ))}
-
-      <button onClick={addFields}>Add another exam</button>
       <button type="submit" onClick={onSubmit}>
         START
       </button>
+      {formData.length < 4 && (
+        <button onClick={addFields}>+ Add another exam</button>
+      )}
     </div>
   );
 };

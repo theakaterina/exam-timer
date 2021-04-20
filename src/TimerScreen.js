@@ -35,11 +35,11 @@ const TimerScreen = (props) => {
   return (
     <div>
       <h1 className="title">{title}</h1>
+      <h2 className="message">{props.message}</h2>
       {mode === "perusal" && (
         <Timer key={1} onEnd={onPerusalEnd} minutes={props.perusal} />
       )}
       {mode === "exam" && <Timer key={2} minutes={props.exam} />}
-      <h2 className="message">{props.message}</h2>
     </div>
   );
 };

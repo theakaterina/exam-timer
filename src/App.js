@@ -11,6 +11,7 @@ import TimerScreen from "./TimerScreen";
 function App() {
   const history = useHistory();
   const [timers, setTimers] = useState([]);
+  const [isActive, setIsActive] = useState(true);
 
   const onTimerFormSubmit = (e) => {
     setTimers(e);
@@ -20,11 +21,16 @@ function App() {
   /*Pause/start button*/
   function toggle() {
     window.dispatchEvent(new CustomEvent("toggleTimer"));
+    setIsActive((f) => !f);
   }
 
   /*Restart button */
-  function restart() {
-    window.dispatchEvent(new CustomEvent("restartTimer"));
+  function reset() {
+    if (!window.confirm("Are you sure you want to reset the timer?")) {
+      return;
+    }
+    window.dispatchEvent(new CustomEvent("resetTimer"));
+    setIsActive(false);
   }
 
   /*Back button */
@@ -42,9 +48,11 @@ function App() {
           {timers.map((timer, index) => (
             <TimerScreen key={index} {...timer} />
           ))}
-          <button onClick={toggle}>pause</button>
-          <button onClick={restart}>restart</button>
-          <button onClick={goBack}>go back</button>
+          <button id="pause" onClick={toggle}>
+            {isActive ? "PAUSE" : "START"}
+          </button>
+          <button onClick={reset}>RESET</button>
+          <button onClick={goBack}>GO BACK</button>
         </Route>
       </Switch>
     </div>
