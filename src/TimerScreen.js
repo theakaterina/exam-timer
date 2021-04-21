@@ -32,6 +32,10 @@ const TimerScreen = (props) => {
     setMode("exam");
   };
 
+  const onExamEnd = () => {
+    console.log("Exam ended");
+  };
+
   return (
     <div>
       <h1 className="title">{title}</h1>
@@ -39,7 +43,9 @@ const TimerScreen = (props) => {
       {mode === "perusal" && (
         <Timer key={1} onEnd={onPerusalEnd} minutes={props.perusal} />
       )}
-      {mode === "exam" && <Timer key={2} minutes={props.exam} />}
+      {mode === "exam" && (
+        <Timer key={2} onEnd={onExamEnd} minutes={props.exam} />
+      )}
     </div>
   );
 };
