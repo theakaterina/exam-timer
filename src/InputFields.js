@@ -42,43 +42,57 @@ const InputFields = (props) => {
   }, [readingType, perusalInput, examInput, messageInput]);
 
   return (
-    <div>
-      <div>
-        <select value={readingType} onChange={onReadingTypeChange}>
-          <option value="perusal">Perusal Time</option>
-          <option value="planning">Planning Time</option>
-          <option value="none">None</option>
-        </select>
-        <input
-          disabled={readingType === "none"}
-          type="number"
-          value={perusalInput}
-          onChange={onPerusalChange}
-        />
-        <span
-          className={classes([
-            "mins",
-            readingType === "none" && "disable-text",
-          ])}
-        >
-          minutes
-        </span>
+    <div className="inputFieldsBox">
+      <div className="inputRow">
+        <div className="innerColumn">
+          <select className="dropDown" value={readingType} onChange={onReadingTypeChange}>
+            <option value="perusal">Perusal Time</option>
+            <option value="planning">Planning Time</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+        <div className="innerColumn secondColumn">
+          <input
+            className="minutesInputField"
+            disabled={readingType === "none"}
+            type="number"
+            value={perusalInput}
+            onChange={onPerusalChange}
+          />
+          <span
+            className={classes([
+              "mins",
+              readingType === "none" && "disable-text",
+            ])}
+          >
+            minutes
+          </span>
+        </div>
       </div>
 
-      <div>
-        <label>Exam Time</label>
-        <input type="number" value={examInput} onChange={onExamChange} />
-        <span className="mins">minutes</span>
+      <div className="inputRow">
+        <div className="innerColumn">
+          <label className="inputLabel">Exam Time</label>
+        </div>
+        <div className="innerColumn secondColumn">
+          <input className="minutesInputField" type="number" value={examInput} onChange={onExamChange} />
+          <span className="mins">minutes</span>
+        </div>
       </div>
-      <div>
-        <label>Text Displayed (optional)</label>
-        <input
-          type="text"
-          name="message"
-          value={messageInput}
-          onChange={onMessageChange}
-          placeholder="e.g. Chemistry"
-        />
+      <div className="inputRow">
+        <div className="innerColumn">
+          <label className="inputLabel">Text Displayed (optional)</label>
+        </div>
+        <div className="innerColumn">
+          <input
+            className="textInputField"
+            type="text"
+            name="message"
+            value={messageInput}
+            onChange={onMessageChange}
+            placeholder="e.g. Chemistry"
+          />
+          </div>
       </div>
     </div>
   );

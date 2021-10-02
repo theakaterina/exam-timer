@@ -43,11 +43,11 @@ const TimerForm = (props) => {
           />
         </div>
       ))}
-      <button type="submit" onClick={onSubmit}>
+      <button id="start" type="submit" onClick={onSubmit}>
         START
       </button>
       {formData.length < 4 && (
-        <button onClick={addFields}>+ Add another exam</button>
+        <button className="addExam" onClick={addFields}>+ Add another exam</button>
       )}
     </div>
   );

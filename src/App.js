@@ -42,7 +42,10 @@ function App() {
     <div>
       <Switch>
         <Route exact path="/">
-          <TimerForm onSubmit={onTimerFormSubmit} />
+          <div className="column">
+            <h1 id="setUpHeading">Exam Timer</h1>
+            <TimerForm onSubmit={onTimerFormSubmit} />
+          </div>
         </Route>
         <Route path="/examstart">
           {timers.map((timer, index) => (
@@ -51,8 +54,8 @@ function App() {
           <button id="pause" onClick={toggle}>
             {isActive ? "PAUSE" : "START"}
           </button>
-          <button onClick={reset}>RESET</button>
-          <button onClick={goBack}>GO BACK</button>
+          <button id="reset" onClick={reset}>RESET</button>
+          <button id="back" onClick={goBack}>GO BACK</button>
         </Route>
       </Switch>
     </div>
